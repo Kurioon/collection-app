@@ -1,12 +1,13 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { collection, addDoc, getDocs, doc, getDoc, deleteDoc, query, where, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, getDocs, doc, getDoc, deleteDoc, query, where, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { useAuthStore } from './auth';
-import { updateDoc } from 'firebase/firestore';
+import { useToast } from 'vue-toastification';
+import { useI18n } from 'vue-i18n';
 
 export const useItemsStore = defineStore('items', () => {
-  const items = ref([]); 
+  const items = ref([]);
   const loading = ref(false);
   const error = ref(null);
   const authStore = useAuthStore();
@@ -14,21 +15,19 @@ export const useItemsStore = defineStore('items', () => {
   // Додавання предмета
   const addItem = async (itemData) => {
     loading.value = true;
-    error.value = null;
     try {
-      if (!authStore.user) throw new Error("Користувач не авторизований");
+      if (!authStore.user) throw new Error('Користувач не авторизований');
       const docRef = await addDoc(collection(db, 'items'), {
         ...itemData,
         ownerId: authStore.user.uid,
         ownerName: authStore.user.email,
         createdAt: serverTimestamp(),
       });
-      loading.value = false;
       return docRef.id;
     } catch (err) {
-      error.value = err.message;
-      loading.value = false;
       throw err;
+    } finally {
+      loading.value = false;
     }
   };
 
@@ -36,23 +35,26 @@ export const useItemsStore = defineStore('items', () => {
   const fetchUserItems = async () => {
     loading.value = true;
     error.value = null;
+    // Отримуємо глобальні інструменти всередині функції
+    const { t } = useI18n();
+    const toast = useToast();
+
     try {
-      if (!authStore.user) throw new Error("Користувач не авторизований");
-      const q = query(collection(db, 'items'), where('ownerId', '==', authStore.user.uid));
-      const querySnapshot = await getDocs(q);
+      if (!authStore.user) throw new Error('Користувач не авторизований');
       
+      const q = query(collection(db, 'items'), where('ownerId', '==', authStore.user.uid)
+      );
+      
+      const querySnapshot = await getDocs(q);
       const fetchedItems = [];
       querySnapshot.forEach((doc) => {
         fetchedItems.push({ id: doc.id, ...doc.data() });
       });
-
-      items.value = fetchedItems.sort((a, b) => {
-        const timeA = a.createdAt?.toMillis() || 0;
-        const timeB = b.createdAt?.toMillis() || 0;
-        return timeB - timeA;
-      });
+      
+      items.value = fetchedItems;
     } catch (err) {
       error.value = err.message;
+      toast.error(`${t('item.fetch_error')}: ${err.message}`);
     } finally {
       loading.value = false;
     }
@@ -61,21 +63,23 @@ export const useItemsStore = defineStore('items', () => {
   // Отримання одного предмета за ID
   const getItemById = async (id) => {
     loading.value = true;
-    error.value = null;
+    const { t } = useI18n();
+    const toast = useToast();
+
     try {
       const docRef = doc(db, 'items', id);
       const docSnap = await getDoc(docRef);
-      
+
       if (docSnap.exists()) {
-        loading.value = false;
         return { id: docSnap.id, ...docSnap.data() };
       } else {
-        throw new Error("Предмет не знайдено");
+        throw new Error('Предмет не знайдено');
       }
     } catch (err) {
-      error.value = err.message;
-      loading.value = false;
+      toast.error(`${t('item.fetch_error')}: ${err.message}`);
       throw err;
+    } finally {
+      loading.value = false;
     }
   };
 
@@ -83,26 +87,25 @@ export const useItemsStore = defineStore('items', () => {
   const deleteItem = async (id) => {
     try {
       await deleteDoc(doc(db, 'items', id));
-      items.value = items.value.filter(item => item.id !== id);
+      items.value = items.value.filter((item) => item.id !== id);
     } catch (err) {
       throw err;
     }
   };
 
+  // Оновлення предмета
   const updateItem = async (id, updatedData) => {
     loading.value = true;
-    error.value = null;
     try {
       const docRef = doc(db, 'items', id);
       await updateDoc(docRef, {
         ...updatedData,
-        updatedAt: serverTimestamp() // Додаємо мітку часу оновлення
+        updatedAt: serverTimestamp(),
       });
-      loading.value = false;
     } catch (err) {
-      error.value = err.message;
-      loading.value = false;
       throw err;
+    } finally {
+      loading.value = false;
     }
   };
 
@@ -110,32 +113,37 @@ export const useItemsStore = defineStore('items', () => {
   const fetchPublicItems = async () => {
     loading.value = true;
     error.value = null;
+    const { t } = useI18n();
+    const toast = useToast();
+
     try {
-      // Запит: тільки публічні предмети
-      const q = query(
-        collection(db, 'items'), 
-        where('isPublic', '==', true)
-      );
+      const q = query(collection(db, 'items'), where('isPublic', '==', true)
+);
 
       const querySnapshot = await getDocs(q);
-      const publicItems = [];
+      const fetchedPublicItems = [];
       querySnapshot.forEach((doc) => {
-        publicItems.push({ id: doc.id, ...doc.data() });
+        fetchedPublicItems.push({ id: doc.id, ...doc.data() });
       });
 
-      // Сортуємо: найновіші скарби спочатку
-      items.value = publicItems.sort((a, b) => {
-        const timeA = a.createdAt?.toMillis() || 0;
-        const timeB = b.createdAt?.toMillis() || 0;
-        return timeB - timeA;
-      });
+      items.value = fetchedPublicItems;
     } catch (err) {
       error.value = err.message;
+      toast.error(`${t('item.fetch_error')}: ${err.message}`);
     } finally {
       loading.value = false;
     }
   };
 
-  // Експортуємо ВСЕ, що використовується в компонентах
-  return { items, loading, error, addItem, fetchUserItems, getItemById, deleteItem, updateItem, fetchPublicItems };
+  return {
+    items,
+    loading,
+    error,
+    addItem,
+    fetchUserItems,
+    getItemById,
+    deleteItem,
+    updateItem,
+    fetchPublicItems,
+  };
 });

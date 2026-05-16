@@ -49,17 +49,26 @@ const router = createRouter({
 });
 
 // Глобальний захисник маршрутів
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
-  const isAuthenticated = authStore.user !== null;
 
-  if (to.meta.requiresAuth && !isAuthenticated) {
-    // Якщо треба логін, а його немає -> на сторінку входу
+  // 1. Очікуємо точної відповіді від Firebase ПЕРЕД будь-якою навігацією
+  if (!authStore.isInitialized) {
+    await authStore.init();
+  }
+
+  // 2. Перевіряємо, чи потрібна авторизація для сторінки, куди йде юзер
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+
+  // 3. Логіка перенаправлення
+  if (requiresAuth && !authStore.user) {
+    // Якщо сторінка закрита, а юзера немає -> на логін
     next('/auth');
-  } else if (to.meta.requiresGuest && isAuthenticated) {
-    // Якщо залогінений юзер лізе на сторінку входу -> в кабінет
+  } else if (to.path === '/auth' && authStore.user) {
+    // Якщо юзер вже залогінений і намагається зайти на /auth -> на дашборд
     next('/dashboard');
   } else {
+    // У всіх інших випадках -> пускаємо далі
     next();
   }
 });
