@@ -1,0 +1,62 @@
+{
+  "nav": {
+    "inventory": "Мій інвентар",
+    "showcase": "Вітрина",
+    "logout": "Вийти"
+  },
+  "auth": {
+    "welcome_back": "З поверненням",
+    "new_account": "Новий акаунт",
+    "email": "Електронна пошта",
+    "password": "Пароль",
+    "login_btn": "Увійти",
+    "register_btn": "Зареєструватися",
+    "or": "або",
+    "google": "Продовжити з Google",
+    "no_account": "Немає акаунту?",
+    "have_account": "Вже маєте акаунт?",
+    "create": "Створити",
+    "login_link": "Увійти"
+  },
+  "dashboard": {
+    "title": "Інвентар",
+    "subtitle": "Твоя приватна колекція",
+    "add_btn": "Додати",
+    "loading": "Завантаження колекції...",
+    "empty_title": "Колекція порожня",
+    "empty_desc": "Час додати перший екземпляр.",
+    "start_btn": "Почати",
+    "public_badge": "Публічно",
+    "attributes_count": "характеристик",
+    "no_desc": "Немає опису"
+  },
+  "showcase": {
+    "title": "Вітрина Скарбів",
+    "subtitle": "Досліджуй унікальні знахідки та приватні колекції з усього світу.",
+    "loading": "Шукаємо скарби...",
+    "empty_title": "Вітрина поки що порожня",
+    "empty_desc": "Стань першим, хто виставить свій скарб на показ!",
+    "collector": "Колекціонер"
+  },
+  "item": {
+    "back": "Назад",
+    "create_title": "Новий екземпляр",
+    "edit_title": "Редагування скарбу",
+    "name_label": "Назва *",
+    "desc_label": "Опис",
+    "img_label": "URL Зображення",
+    "attributes_title": "Характеристики",
+    "add_attr": "+ Додати",
+    "attr_name_placeholder": "Назва",
+    "attr_value_placeholder": "Значення",
+    "public_checkbox": "Публічна вітрина",
+    "save_btn": "Зберегти",
+    "update_btn": "Оновити дані",
+    "saving": "Збереження...",
+    "edit_btn": "Редагувати",
+    "delete_btn": "Видалити",
+    "delete_confirm": "Ти дійсно хочеш видалити цей предмет з колекції?",
+    "loading_details": "Завантаження даних...",
+    "error": "Помилка"
+  }
+}

@@ -1,11 +1,20 @@
-<script setup></script>
+<script setup>
+import { onMounted } from 'vue';
+import { RouterView } from 'vue-router';
+import { useAuthStore } from './stores/auth';
+
+const authStore = useAuthStore();
+
+onMounted(() => {
+  authStore.init();
+});
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <!-- Показуємо loader, поки Firebase перевіряє токен -->
+  <div v-if="authStore.loading" class="min-h-screen flex items-center justify-center text-lg font-medium opacity-70">
+    {{ $t('app.loading') || 'Завантаження...' }}
+  </div>
+  
+  <RouterView v-else />
 </template>
-
-<style scoped></style>

@@ -1,0 +1,62 @@
+{
+  "nav": {
+    "inventory": "My Inventory",
+    "showcase": "Showcase",
+    "logout": "Logout"
+  },
+  "auth": {
+    "welcome_back": "Welcome Back",
+    "new_account": "Create Account",
+    "email": "Email Address",
+    "password": "Password",
+    "login_btn": "Login",
+    "register_btn": "Sign Up",
+    "or": "or",
+    "google": "Continue with Google",
+    "no_account": "Don't have an account?",
+    "have_account": "Already have an account?",
+    "create": "Create",
+    "login_link": "Login"
+  },
+  "dashboard": {
+    "title": "Inventory",
+    "subtitle": "Your private collection",
+    "add_btn": "Add Item",
+    "loading": "Loading collection...",
+    "empty_title": "Collection is empty",
+    "empty_desc": "Time to add your first piece.",
+    "start_btn": "Get Started",
+    "public_badge": "Public",
+    "attributes_count": "attributes",
+    "no_desc": "No description"
+  },
+  "showcase": {
+    "title": "Treasure Showcase",
+    "subtitle": "Explore unique finds and private collections from around the world.",
+    "loading": "Searching for treasures...",
+    "empty_title": "Showcase is empty",
+    "empty_desc": "Be the first to show off your treasure!",
+    "collector": "Collector"
+  },
+  "item": {
+    "back": "Back",
+    "create_title": "New Item",
+    "edit_title": "Edit Treasure",
+    "name_label": "Title *",
+    "desc_label": "Description",
+    "img_label": "Image URL",
+    "attributes_title": "Attributes",
+    "add_attr": "+ Add",
+    "attr_name_placeholder": "Name",
+    "attr_value_placeholder": "Value",
+    "public_checkbox": "Public Showcase",
+    "save_btn": "Save",
+    "update_btn": "Update",
+    "saving": "Saving...",
+    "edit_btn": "Edit",
+    "delete_btn": "Delete",
+    "delete_confirm": "Are you sure you want to delete this item?",
+    "loading_details": "Loading data...",
+    "error": "Error"
+  }
+}
