@@ -31,7 +31,10 @@
     "start_btn": "Почати",
     "public_badge": "Публічно",
     "attributes_count": "характеристик",
-    "no_desc": "Немає опису"
+    "no_desc": "Немає опису",
+    "search_placeholder": "Пошук за назвою або описом...",
+    "search_empty_title": "Нічого не знайдено",
+    "search_empty_desc": "Спробуйте інший запит"
   },
   "showcase": {
     "title": "Вітрина Скарбів",
@@ -39,7 +42,9 @@
     "loading": "Шукаємо скарби...",
     "empty_title": "Вітрина поки що порожня",
     "empty_desc": "Стань першим, хто виставить свій скарб на показ!",
-    "collector": "Колекціонер"
+    "collector": "Колекціонер",
+    "load_more_btn": "Показати ще",
+    "loading_more": "Завантаження..."
   },
   "item": {
     "back": "Назад",
